@@ -7,9 +7,11 @@
 
         <link rel="stylesheet" href="https://{fonts.googleapis.com/css?family=Raleway:400,800}">
         <link rel='stylesheet' href="{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
-        <link rel="stylesheet" href="/css/bootstrap.css">
-        <link rel="stylesheet" href="/css/styles.css">
-        <link rel="stylesheet" href="/css/my_styles.css">
+		{% load static %}
+		
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/my_styles.css">
     </head>
 
     <body>
@@ -25,17 +27,17 @@
 		        <ul class="navbar-nav">
 		           <div class="dropdown">
 		            <li class="nav-item active">
-		                <a class="nav-link" href="log.html">Log in </a>
+		                <a class="nav-link" href="{% url 'main:loginpage' %}">Log in </a>
 		            </li>
 					</div>
 		            <li class="nav-item">
-		                <a class="nav-link" href="#"> Sign up</a>
+		                <a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
 		            </li>
 		            <li class="nav-item">
-		                <a class="nav-link" href="#">About quixdoc</a>
+		                <a class="nav-link" href="{% url 'main:about' %}">About quixdoc</a>
 		            </li>
 		             <li class="nav-item">
-		                <a class="nav-link" href="#">How it works</a>
+		                <a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
 		            </li>
 		        	
 		        </ul>
@@ -47,14 +49,14 @@
 		<!-- Add here -->
 
 		<div class="jumbotron body_display">
-			<img src="/img/quixdoc.jpg" class="img-fluid" alt="Scanner">
+			<img src="/static/img/quixdoc.jpg" class="img-fluid" alt="Scanner">
 		    <h1 class="display-4">Simpler. Easier. Quicker.</h1>
 		    <p class="lead">
 		    	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
 		    </p>
 
 		    <p class="lead">
-		        <a class="btn btn-primary btn-lg" href="/learn_more.html" role="button">Learn more</a>
+		        <a class="btn btn-primary btn-lg" href="{% url 'main:learnmore' %}" role="button">Learn more</a>
 		    </p>
 		</div>
 
