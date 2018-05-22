@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Logs</title>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="https://{fonts.googleapis.com/css?family=Raleway:400,800}">
+        <link rel='stylesheet' href="{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+        <link rel="stylesheet" href="/static/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <link rel="stylesheet" href="/static/css/my_styles.css">
+</head>
+<body>
+	<div class="container-fluid">
+		
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a href="/" class="navbar-brand">Quixdoc</a>
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar3">
+		        <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="navbar-collapse collapse" id="navbar3">
+		        <ul class="navbar-nav">
+		           <div class="dropdown">
+		            <li class="nav-item active">
+		                <a class="nav-link" href="{% url 'main:loginpage' %}">Log in </a>
+		            </li>
+					</div>
+		            <li class="nav-item">
+		                <a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link" href="{% url 'main:about' %}">About quixdoc</a>
+		            </li>
+		             <li class="nav-item">
+		                <a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
+		            </li>
+		        	
+
+		        </ul>
+		    </div>
+		</nav>
+
+
+		<div class="login_form col-sm-200 col-md-500 card-body"> 
+
+			  <form action="{% url 'main:registerform' %}" method="POST">
+			  <div class="form-row">
+
+						<div class="form-group col-md-6 col-md-12">
+					<label for="inputAddress">Company Name</label>
+					<input type="text" class="form-control" placeholder="Company Name">
+				</div>
+			    
+			  <div class="form-group col-md-6 col-md-12">
+			    <label for="inputAddress">Address</label>
+			    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+			  </div>
+			  <div class="form-group col-md-6 col-md-12">
+			    <label for="inputAddress2">Address 2</label>
+			    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+				</div>
+				
+			  <div class="form-row">
+			    <div class="form-group col-md-6">
+			      <label for="inputCity">City</label>
+			      <input type="text" class="form-control" id="inputCity">
+			    </div>
+			    <div class="form-group col-md-4">
+			      <label for="inputState">State</label>
+			      <select id="inputState" name='state' class="form-control">
+			        <option selected>Choose...</option>
+							<option value="AL">AL</option>
+							<option value="AK">AK</option>
+							<option value="AZ">AZ</option>
+							<option value="AR">AR</option>
+							<option value="CA">CA</option>
+							<option value="CO">CO</option>
+							<option value="CT">CT</option>
+							<option value="DE">DE</option>
+							<option value="FL">FL</option>
+							<option value="GA">GA</option>
+							<option value="HI">HI</option>
+							<option value="ID">ID</option>
+							<option value="IL">IL</option>
+							<option value="IN">IN</option>
+							<option value="IA">IA</option>
+							<option value="KS">KS</option>
+							<option value="KY">KY</option>
+							<option value="LA">LA</option>
+							<option value="ME">ME</option>
+							<option value="MD">MD</option>
+							<option value="MA">MA</option>
+							<option value="MI">MI</option>
+							<option value="MN">MN</option>
+							<option value="MS">MS</option>
+							<option value="MO">MO</option>
+							<option value="MT">MT</option>
+							<option value="NE">NE</option>
+							<option value="NV">NV</option>
+							<option value="NH">NH</option>
+							<option value="NJ">NJ</option>
+							<option value="NM">NM</option>
+							<option value="NY">NY</option>
+							<option value="NC">NC</option>
+							<option value="ND">ND</option>
+							<option value="OH">OH</option>
+							<option value="OK">OK</option>
+							<option value="OR">OR</option>
+							<option value="PA">PA</option>
+							<option value="RI">RI</option>
+							<option value="SC">SC</option>
+							<option value="SD">SD</option>
+							<option value="TN">TN</option>
+							<option value="TX">TX</option>
+							<option value="UT">UT</option>
+							<option value="VT">VT</option>
+							<option value="VA">VA</option>
+							<option value="WA">WA</option>
+							<option value="WV">WV</option>
+							<option value="WI">WI</option>
+							<option value="WY">WY</option>
+							
+			      </select>
+			    </div>
+			    <div class="form-group col-md-2">
+			      <label for="inputZip">Zip</label>
+			      <input type="text" class="form-control" id="inputZip">
+			    </div>
+				</div>
+
+				<div class="form-group col-md-6">
+			      <label for="inputEmail4">Email</label>
+			      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+			    </div>
+			    <div class="form-group col-md-6">
+			      <label for="inputPassword4">Password</label>
+			      <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+			    </div>
+			  </div>
+
+			  <button type="submit" class="btn btn-primary">Register</button>
+			</form>
+
+		</div>
+	</div>
+</body>
+</html>

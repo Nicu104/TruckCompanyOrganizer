@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Logs</title>
+	<title>Log in</title>
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <link rel="stylesheet" href="https://{fonts.googleapis.com/css?family=Raleway:400,800}">
         <link rel='stylesheet' href="{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
-        <link rel="stylesheet" href="/css/bootstrap.css">
-        <link rel="stylesheet" href="/css/styles.css">
-        <link rel="stylesheet" href="/css/my_styles.css">
+        <link rel="stylesheet" href="/static/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <link rel="stylesheet" href="/static/css/my_styles.css">
 </head>
 <body>
 	<div class="container-fluid">
@@ -23,27 +23,27 @@
 		        <ul class="navbar-nav">
 		           <div class="dropdown">
 		            <li class="nav-item active">
-		                <a class="nav-link" href="log.html">Log in </a>
+		                <a class="nav-link" href="{% url 'main:loginpage' %}">Log in </a>
 		            </li>
 					</div>
 		            <li class="nav-item">
-		                <a class="nav-link" href="#"> Sign up</a>
+		                <a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
 		            </li>
 		            <li class="nav-item">
-		                <a class="nav-link" href="#">About quixdoc</a>
+		                <a class="nav-link" href="{% url 'main:about' %}">About quixdoc</a>
 		            </li>
 		             <li class="nav-item">
-		                <a class="nav-link" href="#">How it works</a>
+		                <a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
 		            </li>
-		        	
 
 		        </ul>
 		    </div>
 		</nav>
 
 
-		<div class="login_form col-sm-200 col-md-500 card-body"> 
-			<form>
+		<div class="login_form col-sm-200 col-md-500 card-body">
+
+			<form action="{% url 'main:loginform' %}" method="POST">
 			  <div class="form-group">
 			    <label for="exampleInputEmail1">Email address</label>
 			    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
@@ -53,10 +53,13 @@
 			    <label for="exampleInputPassword1">Password</label>
 			    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 			  </div>
-			  <button type="submit" class="btn btn-primary">Submit</button>
+				<button type="submit" class="btn btn-primary inline-button">Submit</button>
+				<a href="{% url 'main:registerpage' %}" class='inline-button'>
+					<button type="button" class="btn btn-primary pull-right">Register</button>
+				</a>
 			</form>
 		 </div>
-
+<!--
 		<div class="login_form col-sm-200 col-md-500 card-body"> 
 			  <form>
 			  <div class="form-row">
@@ -97,7 +100,7 @@
 			  <button type="submit" class="btn btn-primary">Sign in</button>
 			</form>
 		</div>
+		-->
 	</div>
-</form>
 </body>
 </html>
