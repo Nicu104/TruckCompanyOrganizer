@@ -95,4 +95,3 @@ class Photos(models.Model):
     load            = models.ForeignKey(Loads, on_delete=models.CASCADE, related_name='photo')
     user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
     image_field     = models.ImageField()
-    meta            = models
