@@ -109,7 +109,7 @@ class FileItem(models.Model):
         return str(self.name)
 
 class Address(models.Model):
-    company         = models.OneToOneField(Company)
+    company         = models.OneToOneField(Companies, on_delete=models.CASCADE)
     address1        = models.CharField(max_length = 255)
     address2        = models.CharField(max_length = 255)
     city            = models.CharField(max_length = 255)
