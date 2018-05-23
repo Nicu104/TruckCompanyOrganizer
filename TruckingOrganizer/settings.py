@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    # 'files',
 # added next line of code for declaring storages o ns3
     'storages',
 ]
