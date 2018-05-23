@@ -8,6 +8,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 >>>>>>> 87edc9ccc26d7134b68c51a55bb4eedb268ce917
 
+
 # Create your models here.
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
