@@ -1,36 +1,99 @@
 from django.db import models
+from passlib.hash import pbkdf2_sha256
+import re
+from storages.backends.s3boto3 import S3Boto3Storage
+
+
 
 # Create your models here.
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
+PHONE_REGEX = re.compile(r'^[0-9+-]$')
 
-class BaseManager(models.Manager):
+class DataManager(models.Manager):
     def userValidation(self, request):
         firstName = request.POST['first-name']
         lastName = request.POST['last-name']
         email = request.POST['email']
-        paswd = request.POST['password']
-        paswd_conf = request.POST['password_conf']
-        if len(name) < 3:
-            messages.add_message(request, messages.ERROR, "Your name should be at least 3 char long")
+        phoneNumber = request.POST['phone-number']        
+        password = request.POST['password']
+        password_conf = request.POST['password_conf']
         
-        if len(username) < 3:
-            messages.add_message(request, messages.ERROR, "User name should be at least 3 chars long")
+        if len(firstName) < 3:
+            messages.add_message(request, messages.ERROR, "Your first name should be at least 3 char long")
+        
+        if len(lastName) < 3:
+            messages.add_message(request, messages.ERROR, "Your last name should be at least 3 char long")
+        
+        if len(phoneNumber) < 10 or not PHONE_REGEX.match(phoneNumber):
+            messages.add_message(request, messages.ERROR, "Phone number should be 10 characters long and next format xxx-xxx-xxxx")
 
-        if len(paswd) < 8 or paswd != paswd_conf:
+        if not EMAIL_REGEX.match(email):
+            messages.add_message(request, messages.ERROR, "Wrong email format it should be test@test.com")
+
+        if len(password) < 8 or password != password_conf:
             messages.add_message(request, messages.ERROR, 'Password does not match or is shorter than 8 characters')
 
-        if len(Users.objects.filter(user_name = username)) != 0:
+        if len(Users.objects.filter(email = email)) != 0:
             messages.add_message(request, messages.ERROR, "A user with this username exists already, please contact the admin")
 
         if len(get_messages(request)) > 0:
             return False
         else:
-            password = paswd
-            enc_pass = pbkdf2_sha256.encrypt(paswd, rounds = 12000, salt_size = 32)
+            encrypted_password = pbkdf2_sha256.encrypt(password, rounds = 12000, salt_size = 32)
 
             Users.objects.create(
-                name = name,
-                user_name = username,
-                password = enc_pass
+                firstName = firstName,
+                lastName = lastName,
+                email = email,
+                password = encrypted_password,
+                phoneNumber = phoneNumber
             )
             return True
+
+
+
+class MediaStorage(S3Boto3Storage):
+    location = 'assets'
+    file_overwrite = False
+
+
+class Companies(models.Model):
+    companyName     = models.CharField(max_length = 255)
+    companyMC       = models.CharField(max_length = 255)
+    companyFId      = models.CharField(max_length = 255)
+    companyPhone    = models.CharField(max_length = 255)
+    password        = models.TextField()
+    created_at      = models.DateTimeField(auto_now_add = True)
+    updated_at      = models.DateTimeField(auto_now = True)
+    objects         = DataManager()
+
+
+class Users(models.Model):
+    firstName       = models.CharField(max_length = 255)
+    lastName        = models.CharField(max_length = 255)
+    email           = models.CharField(max_length = 255)
+    phoneNumber     = models.CharField(max_length = 255)
+    password        = models.TextField()
+    company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name="user")
+    created_at      = models.DateTimeField(auto_now_add = True)
+    updated_at      = models.DateTimeField(auto_now = True)
+    objects         = DataManager()
+
+
+
+class Loads(models.Model):
+    loadNumber      = models.CharField(max_length = 255)
+    # pickUplocation
+    # dropOffLocation
+    driver          = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="load")
+    company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name='loads')
+    created_at      = models.DateTimeField(auto_now_add = True)
+    updated_at      = models.DateTimeField(auto_now = True)
+
+
+class Photos(models.Model):
+    load            = models.ForeignKey(Loads, on_delete=models.CASCADE, related_name='photo')
+    user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
+    image_field     = models.ImageField()
+    meta            = models

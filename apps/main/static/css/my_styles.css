@@ -1,33 +1,64 @@
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
 
-.login_form{
-	display: inline-block;
-	
-	vertical-align: top;
-	margin-top: 20px;
-	margin-left: 20px;
-	min-width: 99%; 
-}
+	.login_form{
+		vertical-align: top;
+		margin-top: 20px;
+		/* margin-left: 20px; */
+		width: 100%; 
+		margin: auto;
+	}
 
-}
+	.home-h1{
 
-@media only screen and (min-width: 501px){
-.login_form{
-	display: inline-block;
-	width: 95%;
-	vertical-align: top;
-	margin-top: 20px;
-}
-.body_display img{
-	max-width: 95%;
-	display: inline-block;
-}
-.display-4 h1{
-	display: inline-block;
-	max-width: 40%
-}
+		text-align: center;
+		font-size: 19pt;
+		font-weight: bold;
+	}
+
+	.body_display img{
+		max-width: 99%;
 }
 
+}
+@media only screen and (min-width: 601px){
+
+	.login_form{
+
+		width: 80%;
+		vertical-align: top;
+		margin-top: 20px;
+		margin: auto;
+	}
+	.body_display img{
+		max-width: 80%;
+		margin: auto;
+	}
+	.home-h1{
+		text-align: center;
+	}
+}
+
+@media only screen and (min-width: 900px){
+
+	.login_form{
+		width: 60%;
+		vertical-align: top;
+		margin-top: 20px;
+		margin: auto;
+	}
+	.body_display img{
+		max-width: 48%;
+		display: inline-block;
+		vertical-align: top;
+	}
+	.home-h1{
+		display: inline-block;
+		max-width: 48%;
+		text-align: center;
+		font-size: 55pt;
+		font-weight: bold;
+	}
+	}
 .inline-button{
 	display: inline-block;
 }
