@@ -20,6 +20,13 @@ def registerForm(request):
 def logIn(request):
     return redirect('/userPage.html')
 
+# TODO add a new user to the data base for specific company by admin
+def newUser(request):
+    return render(request, 'src/adminPage.html')
+
+def registerUser(request):
+    return redirect('src/adminPage.html')
+
 # TODO render about page
 def about(request):
     return render(request, 'src/learn_more.html')
@@ -27,6 +34,13 @@ def about(request):
 # TODO render a howit works page
 def howitworks(request):
     return redirect('/userPage.html')
+
+# TODO render a howit works page
+def loads(request):
+    return render(request, 'src/allLoads.html')
+
+def images(request):
+    return render(request, 'src/images.html')
 
 # TODO render learn more page
 def learnmore(request):
