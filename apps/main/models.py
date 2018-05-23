@@ -3,6 +3,10 @@ from passlib.hash import pbkdf2_sha256
 import re
 from storages.backends.s3boto3 import S3Boto3Storage
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 87edc9ccc26d7134b68c51a55bb4eedb268ce917
 
 # Create your models here.
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
@@ -94,4 +98,9 @@ class Loads(models.Model):
 class Photos(models.Model):
     load            = models.ForeignKey(Loads, on_delete=models.CASCADE, related_name='photo')
     user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
+<<<<<<< HEAD
     image_field     = models.ImageField()
+=======
+    image_field     = models.ImageField()
+    meta            = models
+>>>>>>> 87edc9ccc26d7134b68c51a55bb4eedb268ce917
