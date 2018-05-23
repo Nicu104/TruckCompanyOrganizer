@@ -2,20 +2,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 	<title>More</title>
-	 <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="https://{fonts.googleapis.com/css?family=Raleway:400,800}">
-    <link rel='stylesheet' href="{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="https://{fonts.googleapis.com/css?family=Raleway:400,800}">
+	<link rel='stylesheet' href="{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<link rel="stylesheet" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" href="/static/css/styles.css">
+	<link rel="stylesheet" href="/static/css/my_styles.css">
 </head>
 <body>
 	<div class="container-fluid">
+		
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a href="/" class="navbar-brand">Quixdoc</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar3">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse" id="navbar3">
+				<ul class="navbar-nav">
+					<div class="dropdown">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'main:loginpage' %}">Log in </a>
+					</li>
+					</div>
+					<li class="nav-item ">
+						<a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="{% url 'main:about' %}">About quixdoc</a>
+					</li>
+						<li class="nav-item">
+						<a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
+					</li>
+					
+
+				</ul>
+			</div>
+		</nav>	
+	
+		
 		<div class="jumbotron body_display">
-			<img src="/img/quixdoc.jpg" class="img-fluid" alt="Scanner">
+			<img src="/static/img/quixdoc.jpg" class="img-fluid" alt="Scanner">
 		    <h1 class="display-4">Simpler. Easier. Quicker.</h1>
 		    <p class="lead">
 		    	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 

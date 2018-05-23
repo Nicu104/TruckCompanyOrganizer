@@ -4,7 +4,6 @@ import re
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
-# Create your models here.
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
 PHONE_REGEX = re.compile(r'^[0-9+-]$')
@@ -119,7 +118,3 @@ class Address(models.Model):
     updated_at      = models.DateTimeField(auto_now=True)
 
 
-# class Photos(models.Model):
-#     load            = models.ForeignKey(Loads, on_delete=models.CASCADE, related_name='photo')
-#     user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
-#     image_field     = models.ImageField()
