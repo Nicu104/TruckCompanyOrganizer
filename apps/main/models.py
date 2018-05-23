@@ -52,9 +52,9 @@ class DataManager(models.Manager):
 
 
 
-class MediaStorage(S3Boto3Storage):
-    location = 'assets'
-    file_overwrite = False
+# class MediaStorage(S3Boto3Storage):
+#     location = 'assets'
+#     file_overwrite = False
 
 
 class Companies(models.Model):
@@ -89,6 +89,34 @@ class Loads(models.Model):
     company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name='loads')
     created_at      = models.DateTimeField(auto_now_add = True)
     updated_at      = models.DateTimeField(auto_now = True)
+
+
+
+class FileItem(models.Model):
+    # user            = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
+    name            = models.CharField(max_length=120, null=True, blank=True)
+    path            = models.TextField(blank=True, null=True)
+    size            = models.BigIntegerField(default=0)
+    file_type       = models.CharField(max_length=120, null=True, blank=True)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
+    uploaded        = models.BooleanField(default=False)
+    active          = models.BooleanField(default=True)
+
+    @property
+    def title(self):
+        return str(self.name)
+
+class Address(models.Model):
+    company         = models.OneToOneField(Company)
+    address1        = models.CharField(max_length = 255)
+    address2        = models.CharField(max_length = 255)
+    city            = models.CharField(max_length = 255)
+    state           = models.CharField(max_length = 255)
+    zipcode         = models.CharField(max_length = 255)
+    created_at      = models.DateTimeField(auto_now_add=True)
+    updated_at      = models.DateTimeField(auto_now=True)
 
 
 class Photos(models.Model):
