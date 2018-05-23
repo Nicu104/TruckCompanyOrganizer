@@ -22,7 +22,7 @@ def logIn(request):
 
 # TODO render about page
 def about(request):
-    return redirect('/userPage.html')
+    return render(request, 'src/learn_more.html')
 
 # TODO render a howit works page
 def howitworks(request):
