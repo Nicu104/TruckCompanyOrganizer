@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect, HttpResponse
-
+from django.shortcuts import render, redirect, HttpResponse, reverse
+from .models import *
 # TODO render the home page
 def index(request):
     return render(request, 'src/index.html')
@@ -14,7 +14,7 @@ def register(request):
 
 # TODO add a new company and redirect to company admin page
 def registerForm(request):
-    return redirect('/adminPage.html')
+    return redirect(reverse('main:adminpage'))
 
 # TODO route for login user and redirect to user page
 def logIn(request):
@@ -25,7 +25,10 @@ def newUser(request):
     return render(request, 'src/adminPage.html')
 
 def registerUser(request):
-    return redirect('src/adminPage.html')
+    if Users.objects.userValidation(request):
+        return redirect(reverse('main:adminpage'))
+    else:
+        return redirect(reverse('main:adminpage'))
 
 # TODO render about page
 def about(request):
@@ -33,7 +36,7 @@ def about(request):
 
 # TODO render a howit works page
 def howitworks(request):
-    return redirect('/userPage.html')
+    return redirect(reverse('main:userpage'))
 
 # TODO render a howit works page
 def loads(request):
@@ -46,3 +49,11 @@ def images(request):
 def learnmore(request):
     return redirect('src/learn_more.html')
 
+# TODO render  adminpage
+def adminpage(request):
+    return render('src/adminPage.html')
+
+
+# TODO render  userpage
+def userpage(request):
+    return render('src/userPage.html')

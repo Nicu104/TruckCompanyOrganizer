@@ -10,12 +10,12 @@ PHONE_REGEX = re.compile(r'^[0-9+-]$')
 
 class DataManager(models.Manager):
     def userValidation(self, request):
-        firstName = request.POST['first-name']
-        lastName = request.POST['last-name']
+        firstName = request.POST['first_name']
+        lastName = request.POST['last_name']
         email = request.POST['email']
-        phoneNumber = request.POST['phone-number']        
+        phoneNumber = request.POST['phone']        
         password = request.POST['password']
-        password_conf = request.POST['password_conf']
+        password_conf = request.POST['confirmPassword']
         
         if len(firstName) < 3:
             messages.add_message(request, messages.ERROR, "Your first name should be at least 3 char long")
