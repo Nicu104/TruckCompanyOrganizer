@@ -42,6 +42,10 @@ def loads(request):
 def images(request):
     return render(request, 'src/images.html')
 
+def logout(request):
+    request.session.flush()
+    return redirect('/')
+
 # TODO render learn more page
 def learnmore(request):
     return redirect('src/learn_more.html')
