@@ -160,8 +160,6 @@ class Users(models.Model):
 
 class Loads(models.Model):
     loadNumber      = models.CharField(max_length = 255)
-    # pickUplocation
-    # dropOffLocation
     driver          = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="load")
     company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name='loads')
     created_at      = models.DateTimeField(auto_now_add = True)
@@ -170,16 +168,10 @@ class Loads(models.Model):
 
 
 class FileItem(models.Model):
-    # user            = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    image           = models.ImageField(blank=True)
     user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
-    name            = models.CharField(max_length=120, null=True, blank=True)
-    path            = models.TextField(blank=True, null=True)
-    size            = models.BigIntegerField(default=0)
-    file_type       = models.CharField(max_length=120, null=True, blank=True)
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
-    uploaded        = models.BooleanField(default=False)
-    active          = models.BooleanField(default=True)
 
     @property
     def title(self):
