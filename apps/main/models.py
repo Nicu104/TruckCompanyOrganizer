@@ -51,6 +51,78 @@ class DataManager(models.Manager):
 
 
 
+#try to login with either of accounts Users or Company
+#in case of successful login equal to email means it is a user and returns 1
+# in case login is a number ir means is a company MC ad we return 0
+# in case neither of those two or wrong password we return -1
+    def autenticate(self, request):
+        login       = request.POST["email"]
+        password    = request.POST['password']
+
+        if EMAIL_REGEX.match(login):
+            user = Users.objects.get(email = login)
+            if pbkdf2_sha256.verify(password, user.password):
+                request.session["user_id"] = user.id
+                return 1
+            else:
+                return -1
+
+        elif PHONE_REGEX.match(login):
+            company = Companies.objects.get(companyMC = login)
+            if pbkdf2_sha256.verify(password, company.password):
+                request.session["company_id"] = company.id
+                return 0
+            else:
+                return -1
+        else:
+            return -1
+    
+
+    def companyValidator(self, request):
+        cName = request.POST['companyName'] 
+        cMC = request.POST['mcNumber'] 
+        cFId = request.POST['federalId'] 
+        cPhone = request.POST['phone'] 
+        password = request.POST['password'] 
+        password_conf = request.POST['confirmPassword']
+
+        add1 = request.POST['address1']
+        add2 = request.POST['address2']
+        cityf = request.POST['city']
+        statef = request.POST['state']
+        zipc = request.POST['zip']
+
+
+        if len(password) < 15 or password != password_conf:
+            messages.add_message(request, messages.ERROR, 'Password does not match or is shorter than 8 characters')
+
+        if len(Companies.objects.filter(companyMC = cMC)) != 0:
+            messages.add_message(request, messages.ERROR, "A company with this MC exists already, please contact the admin")
+
+        if len(get_messages(request)) > 0:
+            return False
+        else:
+            encrypted_password = pbkdf2_sha256.encrypt(password, rounds = 12000, salt_size = 32)
+
+            cm = Companies.objects.create(
+                companyName = cName,
+                companyMC = cMc,
+                companyPhone = cPhone,
+                password = encrypted_password
+            )
+
+            Address.objects.create(
+                company = cm,
+                address1 = add1,
+                address2 = add2,
+                city = cityf,
+                state = statef,
+                zipcode = zipc,
+            )
+            return True
+
+
+
 # class MediaStorage(S3Boto3Storage):
 #     location = 'assets'
 #     file_overwrite = False
@@ -108,7 +180,7 @@ class FileItem(models.Model):
         return str(self.name)
 
 class Address(models.Model):
-    company         = models.OneToOneField(Companies, on_delete=models.CASCADE)
+    company         = models.OneToOneField(Companies, on_delete=models.CASCADE, related_name='address_field')
     address1        = models.CharField(max_length = 255)
     address2        = models.CharField(max_length = 255)
     city            = models.CharField(max_length = 255)
