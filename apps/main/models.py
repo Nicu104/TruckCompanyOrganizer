@@ -1,19 +1,23 @@
 from django.db import models
 from passlib.hash import pbkdf2_sha256
 import re
+from django.contrib import messages
+from django.contrib.messages import get_messages
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
-PHONE_REGEX = re.compile(r'^[0-9+-]$')
+# PHONE_REGEX = re.compile(r'^[0-9+-]$')
 
 class DataManager(models.Manager):
+    
+    
     def userValidation(self, request):
         firstName = request.POST['first_name']
         lastName = request.POST['last_name']
         email = request.POST['email']
-        phoneNumber = request.POST['phone']        
+        pNumber = request.POST['phone']        
         password = request.POST['password']
         password_conf = request.POST['confirmPassword']
         
@@ -23,7 +27,7 @@ class DataManager(models.Manager):
         if len(lastName) < 3:
             messages.add_message(request, messages.ERROR, "Your last name should be at least 3 char long")
         
-        if len(phoneNumber) < 10 or not PHONE_REGEX.match(phoneNumber):
+        if len(pNumber) < 10: #or not PHONE_REGEX.match(phoneNumber):
             messages.add_message(request, messages.ERROR, "Phone number should be 10 characters long and next format xxx-xxx-xxxx")
 
         if not EMAIL_REGEX.match(email):
@@ -39,13 +43,15 @@ class DataManager(models.Manager):
             return False
         else:
             encrypted_password = pbkdf2_sha256.encrypt(password, rounds = 12000, salt_size = 32)
+            cmp = Companies.objects.get(id = request.session['company_id'])
 
             Users.objects.create(
                 firstName = firstName,
                 lastName = lastName,
                 email = email,
                 password = encrypted_password,
-                phoneNumber = phoneNumber
+                phoneNumber = pNumber,
+                company = cmp
             )
             return True
 
@@ -58,29 +64,29 @@ class DataManager(models.Manager):
     def autenticate(self, request):
         login       = request.POST["email"]
         password    = request.POST['password']
+        user = Users.objects.get(email = login)
 
-        if EMAIL_REGEX.match(login):
-            user = Users.objects.get(email = login)
-            if pbkdf2_sha256.verify(password, user.password):
-                request.session["user_id"] = user.id
-                return 1
-            else:
-                return -1
-
-        elif PHONE_REGEX.match(login):
-            company = Companies.objects.get(companyMC = login)
-            if pbkdf2_sha256.verify(password, company.password):
-                request.session["company_id"] = company.id
-                return 0
-            else:
-                return -1
+        if pbkdf2_sha256.verify(password, user.password):
+            request.session["user_id"] = user.id
+            return True
         else:
-            return -1
+            return False
     
+    def cAutenticate(self, request):
+        login       = request.POST["email"]
+        password    = request.POST['password']
+        company = Companies.objects.get(companyMC = login)
+
+        if pbkdf2_sha256.verify(password, company.password):
+            request.session["company_id"] = company.id
+            request.session["company_name"] = company.companyName
+            return True
+        else:
+            return False    
 
     def companyValidator(self, request):
         cName = request.POST['companyName'] 
-        cMC = request.POST['mcNumber'] 
+        cMc = request.POST['mcNumber'] 
         cFId = request.POST['federalId'] 
         cPhone = request.POST['phone'] 
         password = request.POST['password'] 
@@ -96,7 +102,7 @@ class DataManager(models.Manager):
         if len(password) < 15 or password != password_conf:
             messages.add_message(request, messages.ERROR, 'Password does not match or is shorter than 8 characters')
 
-        if len(Companies.objects.filter(companyMC = cMC)) != 0:
+        if len(Companies.objects.filter(companyMC = cMc)) != 0:
             messages.add_message(request, messages.ERROR, "A company with this MC exists already, please contact the admin")
 
         if len(get_messages(request)) > 0:
