@@ -19,15 +19,20 @@ def register(request):
 
 # TODO add a new company and redirect to company admin page
 def registerForm(request):
-    if DataManager.objects.companyValidator(request):
+    if Companies.objects.companyValidator(request):
         return redirect(reverse('main:adminpage'))
     else:
         return redirect(reverse('main:registerpage'))
 
 # TODO route for login user and redirect to user page to check if its a compay or a user that wnts to login
 def logIn(request):
-
-    return redirect('/userPage.html')
+    r = Users.objects.autenticate(request)
+    if r == 1:
+        return redirect(reverse('main:userPage'))
+    elif r == 0:
+        return redirect(reverse('main:adminpage'))
+    else:
+        return redirect(reverse('main:loginform'))
 
 # TODO add a new user to the data base for specific company by admin
 def newUser(request):
@@ -39,9 +44,9 @@ def registerUser(request):
     else:
         return redirect(reverse('main:adminpage'))
 
-# TODO render about page
-def about(request):
-    return render(request, 'src/learn_more.html')
+# # TODO render about page
+# def about(request):
+#     return render(request, 'src/learn_more.html')
 
 # TODO render a howit works page
 def howitworks(request):
@@ -54,9 +59,9 @@ def loads(request):
 def images(request):
     return render(request, 'src/images.html')
 
-# TODO render learn more page
-def learnmore(request):
-    return redirect('src/learn_more.html')
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('main:home'))
 
 # TODO render  adminpage
 def adminpage(request):
@@ -65,4 +70,4 @@ def adminpage(request):
 
 # TODO render  userpage
 def userpage(request):
-    return render('src/userPage.html')
+    return render(request, 'src/userPage.html')

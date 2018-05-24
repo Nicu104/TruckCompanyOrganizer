@@ -18,11 +18,14 @@ urlpatterns = [
     
     re_path('^images/$', views.images, name='images'),
     
-    re_path('^about/$', views.about, name='about'),
+    # re_path('^about/$', views.about, name='about'),
     
+    re_path('^logout$', views.logout, name='logout'),
+  
     re_path('^howitworks/$', views.howitworks, name='howitworks'),
     
-    re_path('^learnmore/$', views.learnmore, name='learnmore'),
+    # re_path('^learnmore/$', views.learnmore, name='learnmore'),
+    
 
     re_path('^adminpage/$', views.adminpage, name='adminpage'),
     

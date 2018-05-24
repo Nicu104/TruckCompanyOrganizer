@@ -40,12 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    'rest_framework',
-    # 'files',
-# added next line of code for declaring storages o ns3
-    'storages',
+    'django.contrib.staticfiles', 
 ]
 
 MIDDLEWARE = [
