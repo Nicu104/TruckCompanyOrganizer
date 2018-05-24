@@ -1,21 +1,46 @@
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from .models import *
-
+import re
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
 # TODO render the home page
 def index(request):
-    return render(request, 'src/index.html')
+    if 'company_id' in request.session:
+        return redirect(reverse('main:adminpage'))
     
+    # return render(request, 'src/index.html')
+    
+    if 'user_id' in request.session:
+        return redirect(reverse('main:userPage'))
+    
+    return render(request, 'src/index.html')
+
+
 
 # TODO renders the login page 
 def log(request):
+    if 'company_id' in request.session:
+        return redirect(reverse('main:adminpage'))
+    
+    # return render(request, 'src/index.html')
+    if 'user_id' in request.session:
+        return redirect(reverse('main:userPage'))
+    
     return render(request, 'src/login.html')
 
 
 
 # TODO render the register page
 def register(request):
+    if 'company_id' in request.session:
+        return redirect(reverse('main:adminpage'))
+    
+    # return render(request, 'src/index.html')
+    if 'user_id' in request.session:
+        return redirect(reverse('main:userPage'))
+    
     return render(request, 'src/register.html')
+
 
 # TODO add a new company and redirect to company admin page
 def registerForm(request):
@@ -24,25 +49,37 @@ def registerForm(request):
     else:
         return redirect(reverse('main:registerpage'))
 
+
+
 # TODO route for login user and redirect to user page to check if its a compay or a user that wnts to login
 def logIn(request):
-    r = Users.objects.autenticate(request)
-    if r == 1:
-        return redirect(reverse('main:userPage'))
-    elif r == 0:
-        return redirect(reverse('main:adminpage'))
+    if EMAIL_REGEX.match(request.POST['email']):
+        if Users.objects.autenticate(request):
+            return redirect(reverse('main:userPage'))
+        else:
+            return redirect(reverse('main:loginform'))
     else:
-        return redirect(reverse('main:loginform'))
+        if Companies.objects.cAutenticate(request):
+            return redirect(reverse('main:adminpage'))
+        else:
+            return redirect(reverse('main:loginform'))
+
+    print('*' * 50, 'nothing worked')
+    return redirect(reverse('main:loginform'))
+
+
 
 # TODO add a new user to the data base for specific company by admin
 def newUser(request):
-    return render(request, 'src/adminPage.html')
-
-def registerUser(request):
     if Users.objects.userValidation(request):
         return redirect(reverse('main:adminpage'))
     else:
         return redirect(reverse('main:adminpage'))
+    # return render(request, 'src/adminPage.html')
+
+def registerUser(request):
+    return render(request, 'src/adminPage.html')
+
 
 # # TODO render about page
 # def about(request):
@@ -60,6 +97,9 @@ def images(request):
     return render(request, 'src/images.html')
 
 def logout(request):
+    # del(request.session['company_id'])
+    # del(request.session['user_id'])
+    # del(request.session['company_name'])
     request.session.flush()
     return redirect(reverse('main:home'))
 

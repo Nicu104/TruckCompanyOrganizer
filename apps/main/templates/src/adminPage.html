@@ -32,9 +32,6 @@
 						<a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{% url 'main:about' %}">About quixdoc</a>
-					</li>
-					<li class="nav-item">
 						<a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
 					</li>
 
@@ -45,7 +42,12 @@
 
 
 		<div class="login_form col-sm-200 col-md-500 bg-light card-body  card shadow-lg p-3 mb-5 rounded mt-5 p-4">
-
+			<h1>{{ request.session.company_name }}</h1>
+			{% if messages %}
+				{% for message in messages %}
+					<h3>{{ message }}</h3>
+				{% endfor %}
+			{% endif %}
 			<form action="{% url 'main:registernewuser' %}" method="POST">
 				{% csrf_token %}
 				<div class="form-row">

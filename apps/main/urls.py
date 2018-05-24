@@ -20,7 +20,7 @@ urlpatterns = [
     
     # re_path('^about/$', views.about, name='about'),
     
-    re_path('^logout$', views.logout, name='logout'),
+    re_path('^logout/$', views.logout, name='logout'),
   
     re_path('^howitworks/$', views.howitworks, name='howitworks'),
     
