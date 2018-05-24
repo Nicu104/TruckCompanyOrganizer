@@ -1,12 +1,17 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, reverse
+from .models import *
+
 
 # TODO render the home page
 def index(request):
     return render(request, 'src/index.html')
     
-# TODO render log in page
+
+# TODO renders the login page 
 def log(request):
     return render(request, 'src/login.html')
+
+
 
 # TODO render the register page
 def register(request):
@@ -14,10 +19,14 @@ def register(request):
 
 # TODO add a new company and redirect to company admin page
 def registerForm(request):
-    return redirect('/adminPage.html')
+    if DataManager.objects.companyValidator(request):
+        return redirect(reverse('main:adminpage'))
+    else:
+        return redirect(reverse('main:registerpage'))
 
-# TODO route for login user and redirect to user page
+# TODO route for login user and redirect to user page to check if its a compay or a user that wnts to login
 def logIn(request):
+
     return redirect('/userPage.html')
 
 # TODO add a new user to the data base for specific company by admin
@@ -25,7 +34,10 @@ def newUser(request):
     return render(request, 'src/adminPage.html')
 
 def registerUser(request):
-    return redirect('src/adminPage.html')
+    if Users.objects.userValidation(request):
+        return redirect(reverse('main:adminpage'))
+    else:
+        return redirect(reverse('main:adminpage'))
 
 # TODO render about page
 def about(request):
@@ -33,7 +45,7 @@ def about(request):
 
 # TODO render a howit works page
 def howitworks(request):
-    return redirect('/userPage.html')
+    return redirect(reverse('main:userpage'))
 
 # TODO render a howit works page
 def loads(request):
@@ -50,3 +62,11 @@ def logout(request):
 def learnmore(request):
     return redirect('src/learn_more.html')
 
+# TODO render  adminpage
+def adminpage(request):
+    return render(request, 'src/adminPage.html')
+
+
+# TODO render  userpage
+def userpage(request):
+    return render('src/userPage.html')
