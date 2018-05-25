@@ -20,7 +20,10 @@ class DataManager(models.Manager):
         firstName = request.POST['first_name']
         lastName = request.POST['last_name']
         email = request.POST['email']
-        pNumber = request.POST['phone']        
+        pNumber = request.POST['phone']   
+        #   user level 1-driver
+        #  0 - dispatcher     
+        uLevel = request.POST['userLevel']
         password = request.POST['password']
         password_conf = request.POST['confirmPassword']
         
@@ -54,7 +57,8 @@ class DataManager(models.Manager):
                 email = email,
                 password = encrypted_password,
                 phoneNumber = pNumber,
-                company = cmp
+                company = cmp,
+                level = uLevel
             )
             return True
 
@@ -71,6 +75,7 @@ class DataManager(models.Manager):
 
         if pbkdf2_sha256.verify(password, user.password):
             request.session["user_id"] = user.id
+            request.session["access_level"] = user.level
             return True
         else:
             return False
@@ -226,6 +231,7 @@ class Users(models.Model):
     phoneNumber     = models.CharField(max_length = 255)
     password        = models.TextField()
     company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name="user")
+    level           = models.IntegerField(default = 1)
     created_at      = models.DateTimeField(auto_now_add = True)
     updated_at      = models.DateTimeField(auto_now = True)
     objects         = DataManager()

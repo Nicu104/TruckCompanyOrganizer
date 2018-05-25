@@ -6,6 +6,10 @@
 		width: 100%; 
 		margin: auto;
 	}
+	.images_upload{
+		width: 100%; 
+		margin: auto;
+	}
 
 	.home-h1{
 		text-align: center;
@@ -25,6 +29,10 @@
 		vertical-align: top;
 		margin: auto;
 	}
+	.images_upload{
+		width: 90%; 
+		margin: auto;
+	}
 	.body_display img{
 		max-width: 90%;
 		margin: auto;
@@ -39,6 +47,10 @@
 	.login_form{
 		margin-top: 20px;
 		width: 60%;
+		margin: auto;
+	}
+	.images_upload{
+		width: 80%; 
 		margin: auto;
 	}
 	.body_display img{

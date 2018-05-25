@@ -44,10 +44,8 @@
 
             <div class="image-block mt-3">
                 {% for picture in pictures %}
-                    <img src="{{ MEDIA_URL }}{{ picture.image.url }}" alt="Image" class="img-thumbnail rounded">
-                    <img src="/media/1.png">
+                    <img src="{{ picture.image.url }}" alt="Image" class="img-thumbnail rounded">
                 {% endfor %}
-           
             </div>
 
             <!--

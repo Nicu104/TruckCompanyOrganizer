@@ -55,7 +55,10 @@ def registerForm(request):
 def logIn(request):
     if EMAIL_REGEX.match(request.POST['email']):
         if Users.objects.autenticate(request):
-            return redirect(reverse('main:userPage'))
+            if request.session["access_level"] == 1:
+                return redirect(reverse('main:userPage'))
+            elif request.session["access_level"] == 0:
+                return redirect(reverse('main:tableLoads'))
         else:
             return redirect(reverse('main:loginform'))
     else:
@@ -89,15 +92,18 @@ def registerUser(request):
 def howitworks(request):
     return redirect(reverse('main:userpage'))
 
+
+
 # TODO render a table with all loads
+# check if user is logged in adn if its access level is an approprieet one
 def loads(request):
-    if not 'user_id' in request.session:
+    if not 'user_id' in request.session or request.session['access_level'] != 0:
         return redirect(reverse('main:login'))
 
     user = Users.objects.get(id = request.session['user_id'])
-    # company = user.company
-    loads = Loads.objects.filter(company = user.company)
-
+    
+    loads = Loads.objects.filter(company = user.company).order_by('-created_at')
+  
     context = {
         'loads' : loads
     }
@@ -108,10 +114,8 @@ def loads(request):
 def images(request):
     return render(request, 'src/images.html')
 
+
 def logout(request):
-    # del(request.session['company_id'])
-    # del(request.session['user_id'])
-    # del(request.session['company_name'])
     request.session.flush()
     return redirect(reverse('main:home'))
 
