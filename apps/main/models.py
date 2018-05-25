@@ -1,10 +1,13 @@
-from django.db import models
+from __future__ import unicode_literals
 from passlib.hash import pbkdf2_sha256
 import re
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from storages.backends.s3boto3 import S3Boto3Storage
-
+from django.db import models
+from django.utils.deconstruct import deconstructible
+import os, time, random, string
+from uuid import uuid4
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
@@ -127,11 +130,82 @@ class DataManager(models.Manager):
             )
             return True
 
+    def loadValidator(self, request):
+        loadNr = request.POST['loadNumber']
+        imgs = []
 
+        try:
+            imgs.append(request.FILES['myImage1'])
+        except:
+            print('error, myImage1')
+ 
+        try:
+            imgs.append(request.FILES['myImage2'])
+        except:
+            print('error, myImage2')
+ 
+        try:
+            imgs.append(request.FILES['myImage3'])
+        except:
+            print('error, myImage3')
+ 
+        try:
+            imgs.append(request.FILES['myImage4'])
+        except:
+            print('error, myImage4')
+ 
+        try:
+            imgs.append(request.FILES['myImage5'])
+        except:
+            print('error, myImage5')
+ 
+        try:
+            imgs.append(request.FILES['myImage6'])
+        except:
+            print('error, myImage6')       
 
-# class MediaStorage(S3Boto3Storage):
-#     location = 'assets'
-#     file_overwrite = False
+        
+        user = Users.objects.get(id = request.session['user_id'])
+
+        if len(loadNr) < 1:
+            messages.add_message(request, messages.ERROR, "invalid load number")
+
+        if len(get_messages(request)) > 0:
+            return False
+        try:
+            load = Loads.objects.get(loadNumber = loadNr)
+        except:
+            load = Loads.objects.filter(loadNumber = loadNr)
+            if len(load) > 1:
+                messages.add_message(request, messages.ERROR, "Too many loads with same number")
+                return False
+            
+        load = Loads.objects.filter(loadNumber = loadNr)
+        if len(load) > 0:
+            load = load.last()
+            for img in imgs:
+                file = FileItem.objects.create(
+                    image = img,
+                    userFile = user,
+                    loadFile = load,
+                )
+            return True
+
+        else:
+            load = Loads.objects.create(
+                loadNumber = loadNr,
+                driver = user,
+                company = user.company
+            )
+            print(load)
+
+            for img in imgs:
+                file = FileItem.objects.create(
+                    image = img,
+                    userFile = user,
+                    loadFile = load, 
+                )
+            return True
 
 
 class Companies(models.Model):
@@ -164,18 +238,40 @@ class Loads(models.Model):
     company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name='loads')
     created_at      = models.DateTimeField(auto_now_add = True)
     updated_at      = models.DateTimeField(auto_now = True)
+    objects = DataManager()
 
 
 
 class FileItem(models.Model):
-    image           = models.ImageField(blank=True)
-    user            = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='photo')
+    
+    @deconstructible
+    class PathAndRename(object):
+
+        def __init__(self, sub_path):
+            self.path = sub_path
+
+        def __call__(self, instance, filename):
+            # eg: filename = 'my uploaded file.jpg'
+            ext = filename.split('.')[-1]  #eg: 'jpg'
+            uid = str(uuid4())[:10]    #eg: '567ae32f97'
+
+            # eg: 'my-uploaded-file'
+            new_name = '-'.join(filename.replace('.%s' % ext, '').split())
+
+            # eg: 'my-uploaded-file_64c942aa64.jpg'
+            renamed_filename = '%(new_name)s_%(uid)s.%(ext)s' % {'new_name': new_name, 'uid': uid, 'ext': ext}
+
+            # eg: 'images/2017/01/29/my-uploaded-file_64c942aa64.jpg'
+            return os.path.join(self.path, renamed_filename)
+
+    image_path = time.strftime('images/%Y/%m/%d')
+    image = models.ImageField(upload_to=PathAndRename(image_path))
+    
+    userFile        = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='user_photo')
+    loadFile        = models.ForeignKey(Loads, on_delete=models.CASCADE, related_name='load_photo')  
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
 
-    @property
-    def title(self):
-        return str(self.name)
 
 class Address(models.Model):
     company         = models.OneToOneField(Companies, on_delete=models.CASCADE, related_name='address_field')

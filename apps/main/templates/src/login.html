@@ -39,9 +39,13 @@
 			</div>
 		</nav>
 
-
+			
 		<div class="col-sm-200 col-md-500 card-body card bg-light shadow-lg p-3 mb-5 rounded login_form mt-5">
-
+			{% if messages %}
+				{% for msg in messages %}
+					<h2>{{ msg }}</h2>
+				{% endfor %}
+			{% endif %}
 
 			<form action="{% url 'main:loginform' %}" method="POST">
 				{% csrf_token %}

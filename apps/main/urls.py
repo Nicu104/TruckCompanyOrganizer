@@ -33,12 +33,16 @@ urlpatterns = [
 
     re_path('^adminpage/$', views.adminpage, name='adminpage'),
     
-    re_path('^userpage/$', views.userpage, name='userpage'),
+    re_path('^userpage/$', views.userpage, name='userPage'),
     
+    re_path('^upload_pic', views.upload_pic, name='upload_pic'),
+    
+    re_path('^picturesLoad/(?P<id>\d+)/$', views.picturesLoad, name='picturesLoad'),
     
     re_path('', views.index, name='home'),
-    
+
 ]
 
+
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -29,20 +29,24 @@
 		            <li class="nav-item">
 		                <a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
 		            </li>
-		            <li class="nav-item">
-		                <a class="nav-link" href="{% url 'main:about' %}">About quixdoc</a>
-		            </li>
 		             <li class="nav-item">
-		                <a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
+		                <a class="nav-link" href="{% url 'main:logout' %}">Log out</a>
 		            </li>
 
 		        </ul>
 		    </div>
         </nav>
-        
-            <div class="image-block mt-3">
+            {% if messages %}
+				{% for msg in messages %}
+					<h2>{{ msg }}</h2>
+				{% endfor %}
+			{% endif %}
 
-                <img src="..." alt="Image" class="img-thumbnail rounded">
+            <div class="image-block mt-3">
+                {% for picture in pictures %}
+                    <img src="{{ MEDIA_URL }}{{ picture.image.url }}" alt="Image" class="img-thumbnail rounded">
+                    <img src="/media/1.png">
+                {% endfor %}
            
             </div>
 

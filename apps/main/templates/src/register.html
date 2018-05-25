@@ -41,7 +41,12 @@
 		</nav>
 
 		<div class="login_form col-sm-200 col-md-500 bg-light card-body  card shadow-lg p-3 mb-5 rounded mt-5 p-4">
-
+			{% if messages %}
+				{% for msg in messages %}
+					<h2>{{ msg }}</h2>
+				{% endfor %}
+			{% endif %}
+			
 			<form action="{% url 'main:registerform' %}" method="POST">
 				{% csrf_token %}
 

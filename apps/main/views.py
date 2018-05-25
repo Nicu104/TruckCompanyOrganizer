@@ -89,9 +89,21 @@ def registerUser(request):
 def howitworks(request):
     return redirect(reverse('main:userpage'))
 
-# TODO render a howit works page
+# TODO render a table with all loads
 def loads(request):
-    return render(request, 'src/allLoads.html')
+    if not 'user_id' in request.session:
+        return redirect(reverse('main:login'))
+
+    user = Users.objects.get(id = request.session['user_id'])
+    # company = user.company
+    loads = Loads.objects.filter(company = user.company)
+
+    context = {
+        'loads' : loads
+    }
+    return render(request, 'src/allLoads.html', context)
+
+
 
 def images(request):
     return render(request, 'src/images.html')
@@ -110,4 +122,35 @@ def adminpage(request):
 
 # TODO render  userpage
 def userpage(request):
+    if not 'user_id' in request.session:
+        return redirect(reverse('main:login'))
+
     return render(request, 'src/userPage.html')
+
+
+# TODO get the post data and upload it to the server
+def upload_pic(request):
+    if Loads.objects.loadValidator(request):
+        return redirect(reverse('main:userPage'))
+    else:
+        return redirect(reverse('main:userPage'))
+            
+    # return render(request, 'src/userPage.html')
+
+
+
+
+# TODO render page with all pictures for a specific load
+def picturesLoad(request, id):
+    if not 'user_id' in request.session:
+        return redirect(reverse('main:login'))
+
+    load = Loads.objects.get(id = id)
+    pictures = FileItem.objects.filter(loadFile = load)
+
+    context = {
+        'pictures' : pictures
+    }
+
+    return render(request, 'src/images.html', context)
+
