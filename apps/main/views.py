@@ -5,14 +5,18 @@ EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-copyZ0-9._-]+\.[a-zA-Z]+$')
 
 # TODO render the home page
 def index(request):
+   
     if 'company_id' in request.session:
         return redirect(reverse('main:adminpage'))
-    
-    # return render(request, 'src/index.html')
-    
+
     if 'user_id' in request.session:
-        return redirect(reverse('main:userPage'))
     
+        if request.session["access_level"] == 1:
+            return redirect(reverse('main:userPage'))
+
+        elif request.session["access_level"] == 0:
+            return redirect(reverse('main:tableLoads'))
+ 
     return render(request, 'src/index.html')
 
 
@@ -55,7 +59,10 @@ def registerForm(request):
 def logIn(request):
     if EMAIL_REGEX.match(request.POST['email']):
         if Users.objects.autenticate(request):
-            return redirect(reverse('main:userPage'))
+            if request.session["access_level"] == 1:
+                return redirect(reverse('main:userPage'))
+            elif request.session["access_level"] == 0:
+                return redirect(reverse('main:tableLoads'))
         else:
             return redirect(reverse('main:loginform'))
     else:
@@ -89,16 +96,21 @@ def registerUser(request):
 def howitworks(request):
     return redirect(reverse('main:userpage'))
 
+
+
 # TODO render a table with all loads
+# check if user is logged in adn if its access level is an approprieet one
 def loads(request):
-    if not 'user_id' in request.session:
-        return redirect(reverse('main:login'))
+
+    if not 'user_id' in request.session or request.session['access_level'] != 0:
+        return redirect(reverse('main:loginpage'))
 
     user = Users.objects.get(id = request.session['user_id'])
-    # company = user.company
-    loads = Loads.objects.filter(company = user.company)
-
+    
+    loads = Loads.objects.filter(company = user.company).order_by('-created_at')
+  
     context = {
+        'user' : user,
         'loads' : loads
     }
     return render(request, 'src/allLoads.html', context)
@@ -108,10 +120,8 @@ def loads(request):
 def images(request):
     return render(request, 'src/images.html')
 
+
 def logout(request):
-    # del(request.session['company_id'])
-    # del(request.session['user_id'])
-    # del(request.session['company_name'])
     request.session.flush()
     return redirect(reverse('main:home'))
 
@@ -124,6 +134,7 @@ def adminpage(request):
 def userpage(request):
     if not 'user_id' in request.session:
         return redirect(reverse('main:login'))
+    # if 
 
     return render(request, 'src/userPage.html')
 

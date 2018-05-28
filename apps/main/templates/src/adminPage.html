@@ -24,6 +24,7 @@
 			<div class="navbar-collapse collapse" id="navbar3">
 				<ul class="navbar-nav">
 					<div class="dropdown">
+						<!--
 						<li class="nav-item">
 							<a class="nav-link" href="{% url 'main:loginpage' %}">Log in </a>
 						</li>
@@ -31,8 +32,9 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="{% url 'main:registerpage' %}"> Register</a>
 					</li>
+					-->
 					<li class="nav-item">
-						<a class="nav-link" href="{% url 'main:howitworks' %}">How it works</a>
+						<a class="nav-link" href="{% url 'main:logout' %}">Log Out</a>
 					</li>
 
 
@@ -58,9 +60,18 @@
 					</div>
 
 					<div class="form-row">
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-12">
 							<label for="last_name">Last name</label>
 							<input type="text" class="form-control" placeholder="Last name" required name="last_name">
+						</div>
+						<br>
+						<div class="form-group col-md-6">
+							<label for="userLevel">Dispahtcher/Driver</label>
+							<select id="inputState" name='userLevel' class="form-control">
+								<option selected required>Access level</option>
+								<option value="0">Dispatcher</option>
+								<option value="1">Driver</option>
+							</select>
 						</div>
 						<div class="form-row">
 							<div class="form-group col-md-6">
@@ -76,7 +87,7 @@
 							<div class="form-group col-md-6">
 								<label for="inputPassword4">Password</label>
 								<input type="password" class="form-control" id="inputPassword4" required pattern=".{6,20}" placeholder="Password between 6-20 characters"
-								    name="password">
+								 name="password">
 							</div>
 							<div class="form-group col-md-6">
 								<label for="inputPassword4">Confirm Password</label>

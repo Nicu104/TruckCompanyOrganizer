@@ -20,7 +20,11 @@ class DataManager(models.Manager):
         firstName = request.POST['first_name']
         lastName = request.POST['last_name']
         email = request.POST['email']
-        pNumber = request.POST['phone']        
+        pNumber = request.POST['phone']   
+        #   user level 1-driver
+        #  0 - dispatcher     
+        uLevel = request.POST['userLevel']
+        
         password = request.POST['password']
         password_conf = request.POST['confirmPassword']
         
@@ -54,23 +58,25 @@ class DataManager(models.Manager):
                 email = email,
                 password = encrypted_password,
                 phoneNumber = pNumber,
-                company = cmp
+                company = cmp,
+                level = uLevel
             )
             return True
 
 
 
-#try to login with either of accounts Users or Company
-#in case of successful login equal to email means it is a user and returns 1
-# in case login is a number ir means is a company MC ad we return 0
-# in case neither of those two or wrong password we return -1
     def autenticate(self, request):
         login       = request.POST["email"]
         password    = request.POST['password']
-        user = Users.objects.get(email = login)
+        try:
+            user = Users.objects.get(email = login)
+        except:
+            messages.add_message(request, messages.ERROR, "No User with this email")
+            return False
 
         if pbkdf2_sha256.verify(password, user.password):
             request.session["user_id"] = user.id
+            request.session["access_level"] = user.level
             return True
         else:
             return False
@@ -226,6 +232,7 @@ class Users(models.Model):
     phoneNumber     = models.CharField(max_length = 255)
     password        = models.TextField()
     company         = models.ForeignKey(Companies, on_delete=models.CASCADE, related_name="user")
+    level           = models.IntegerField()
     created_at      = models.DateTimeField(auto_now_add = True)
     updated_at      = models.DateTimeField(auto_now = True)
     objects         = DataManager()
